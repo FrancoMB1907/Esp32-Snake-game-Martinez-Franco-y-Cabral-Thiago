@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Snake Game - ESP32</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        :root { --bg: #f0f0f0; --card-bg: #fff; --border: #ddd; --text: #333; --text-soft: #555; --text-muted: #888; --text-faint: #aaa; --accent: #4a8c5c; --accent-hover: #3d7a4e; --feature-border: #ddd; --header-border: #ddd; }
+        body.dark { --bg: #1a1a1a; --card-bg: #252525; --border: #333; --text: #ddd; --text-soft: #aaa; --text-muted: #777; --text-faint: #666; --accent: #5cb87a; --accent-hover: #4a9e68; --feature-border: #333; --header-border: #333; }
+        body { font-family: 'Helvetica Neue', Arial, sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: center; transition: background 0.3s, color 0.3s; }
+        .container { text-align: center; max-width: 680px; padding: 2rem; position: relative; }
+        .theme-btn { position: fixed; top: 1rem; right: 1rem; background: var(--card-bg); border: 1px solid var(--border); border-radius: 4px; padding: 0.5rem 0.8rem; cursor: pointer; font-size: 0.85rem; color: var(--text); font-family: inherit; transition: background 0.2s; }
+        .theme-btn:hover { background: var(--border); }
+        .logo { font-size: 3rem; font-weight: bold; color: var(--text); margin-bottom: 0.25rem; letter-spacing: -1px; }
+        .logo span { color: var(--accent); }
+        .subtitle { font-size: 0.9rem; color: var(--text-muted); margin-bottom: 2rem; text-transform: uppercase; letter-spacing: 2px; }
+        .card { background: var(--card-bg); border: 1px solid var(--border); border-radius: 4px; padding: 2rem; margin-bottom: 2rem; text-align: left; transition: background 0.3s, border-color 0.3s; }
+        .card p { line-height: 1.7; color: var(--text-soft); margin-bottom: 1rem; font-size: 0.95rem; }
+        .card p:last-child { margin-bottom: 0; }
+        .features { display: grid; grid-template-columns: 1fr 1fr; gap: 1px; background: var(--feature-border); border: 1px solid var(--border); margin: 2rem 0; }
+        .feature { background: var(--card-bg); padding: 1.2rem; text-align: left; }
+        .feature h3 { font-size: 0.85rem; color: var(--accent); margin-bottom: 0.35rem; text-transform: uppercase; letter-spacing: 1px; }
+        .feature p { font-size: 0.85rem; color: var(--text-muted); }
+        .btn { display: inline-block; padding: 0.85rem 2.5rem; background: var(--accent); color: #fff; font-size: 1rem; font-weight: 500; border: none; border-radius: 4px; cursor: pointer; text-decoration: none; }
+        .btn:hover { background: var(--accent-hover); }
+        .footer { margin-top: 2rem; font-size: 0.8rem; color: var(--text-faint); }
+    </style>
+</head>
+<body>
+    <button class="theme-btn" onclick="toggleTheme()">🌓</button>
+    <div class="container">
+        <div class="logo">SNAKE<span>.</span></div>
+        <div class="subtitle">ESP32 &middot; TFT Display &middot; Leaderboard</div>
+        <div class="card">
+            <p>El clásico juego de la serpiente implementado sobre un microcontrolador <strong>ESP32</strong> con pantalla TFT ILI9341 a color, control por cruceta de 4 botones y efectos de sonido mediante buzzer pasivo.</p>
+            <p>La dificultad aumenta progresivamente cada 100 puntos, y cada partida se registra automáticamente en el leaderboard online.</p>
+        </div>
+        <div class="features">
+            <div class="feature"><h3>Control Físico</h3><p>4 botones direccionales con respuesta táctil inmediata</p></div>
+            <div class="feature"><h3>Dificultad Progresiva</h3><p>Velocidad aumenta cada 100 puntos</p></div>
+            <div class="feature"><h3>Efectos de Sonido</h3><p>Feedback sonoro con buzzer piezoeléctrico</p></div>
+            <div class="feature"><h3>Leaderboard Cloud</h3><p>Puntajes persistidos en Supabase</p></div>
+        </div>
+        <a href="{% url 'leaderboard' %}" class="btn">Ver Leaderboard</a>
+        <div class="footer">Thiago Cabral &amp; Franco Martinez — Integración Tecnológica</div>
+    </div>
+    <script>
+        if (localStorage.getItem('theme') === 'dark') document.body.classList.add('dark');
+        function toggleTheme() {
+            document.body.classList.toggle('dark');
+            localStorage.setItem('theme', document.body.classList.contains('dark') ? 'dark' : 'light');
+        }
+    </script>
+</body>
+</html>
