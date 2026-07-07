@@ -6,8 +6,8 @@
     <title>Leaderboard - Snake Game</title>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
-        :root { --bg: #f0f0f0; --card-bg: #fff; --border: #ddd; --border-light: #eee; --text: #333; --text-soft: #555; --text-muted: #888; --text-faint: #aaa; --accent: #4a8c5c; --accent-hover: #3d7a4e; --th-bg: #fafafa; --row-hover: #fafafa; --tab-border: #ddd; }
-        body.dark { --bg: #1a1a1a; --card-bg: #252525; --border: #333; --border-light: #2a2a2a; --text: #ddd; --text-soft: #aaa; --text-muted: #777; --text-faint: #666; --accent: #5cb87a; --accent-hover: #4a9e68; --th-bg: #2a2a2a; --row-hover: #2a2a2a; --tab-border: #333; }
+        :root { --bg: #f0f0f0; --card-bg: #fff; --border: #ddd; --border-light: #eee; --text: #333; --text-soft: #555; --text-muted: #888; --text-faint: #aaa; --accent: #4a8c5c; --accent-hover: #3d7a4e; --th-bg: #fafafa; --row-hover: #fafafa; }
+        body.dark { --bg: #1a1a1a; --card-bg: #252525; --border: #333; --border-light: #2a2a2a; --text: #ddd; --text-soft: #aaa; --text-muted: #777; --text-faint: #666; --accent: #5cb87a; --accent-hover: #4a9e68; --th-bg: #2a2a2a; --row-hover: #2a2a2a; }
         body { font-family: 'Helvetica Neue', Arial, sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; transition: background 0.3s, color 0.3s; }
         .container { max-width: 780px; margin: 0 auto; padding: 2rem 1rem; }
         .theme-btn { position: fixed; top: 1rem; right: 1rem; background: var(--card-bg); border: 1px solid var(--border); border-radius: 4px; padding: 0.5rem 0.8rem; cursor: pointer; font-size: 0.85rem; color: var(--text); font-family: inherit; z-index: 10; transition: background 0.2s; }
@@ -20,15 +20,12 @@
         .search-bar { margin-bottom: 1.5rem; }
         .search-bar input { width: 100%; padding: 0.65rem 1rem; border: 1px solid var(--border); border-radius: 4px; font-size: 0.9rem; font-family: inherit; background: var(--card-bg); color: var(--text); outline: none; transition: border-color 0.2s; }
         .search-bar input:focus { border-color: var(--accent); }
-        .tabs { display: flex; gap: 0; margin-bottom: 1.5rem; border-bottom: 2px solid var(--tab-border); }
-        .tab { padding: 0.6rem 1.4rem; font-size: 0.85rem; font-weight: 500; color: var(--text-muted); text-decoration: none; border-bottom: 2px solid transparent; margin-bottom: -2px; transition: color 0.2s, border-color 0.2s; }
-        .tab:hover { color: var(--accent); }
-        .tab.active { color: var(--accent); border-bottom-color: var(--accent); }
         .filter-info { margin-bottom: 1rem; font-size: 0.85rem; color: var(--text-muted); }
         .filter-info a { color: var(--accent); margin-left: 0.5rem; }
         .table-wrap { background: var(--card-bg); border: 1px solid var(--border); border-radius: 4px; overflow: hidden; transition: background 0.3s, border-color 0.3s; }
         table { width: 100%; border-collapse: collapse; }
         th { padding: 0.65rem 1rem; text-align: left; font-size: 0.75rem; font-weight: 600; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; background: var(--th-bg); border-bottom: 1px solid var(--border-light); }
+        th.right { text-align: right; }
         td { padding: 0.75rem 1rem; border-bottom: 1px solid var(--border-light); font-size: 0.9rem; transition: background 0.2s; }
         tr:last-child td { border-bottom: none; }
         tr:hover td { background: var(--row-hover); }
@@ -53,18 +50,9 @@
             <div class="search-bar">
                 <input type="text" name="player" placeholder="Buscar jugador..." value="{{ current_player }}" autocomplete="off">
             </div>
-            <div class="tabs">
-                <a href="?{% if current_player %}player={{ current_player }}&{% endif %}" class="tab {% if not current_difficulty %}active{% endif %}">Todas</a>
-                {% for d in difficulties %}
-                <a href="?difficulty={{ d }}{% if current_player %}&player={{ current_player }}{% endif %}" class="tab {% if current_difficulty == d %}active{% endif %}">{{ d|capfirst }}</a>
-                {% endfor %}
-            </div>
-            {% if current_player or current_difficulty %}
+            {% if current_player %}
             <div class="filter-info">
-                Filtros:
-                {% if current_difficulty %}<strong>{{ current_difficulty|capfirst }}</strong>{% endif %}
-                {% if current_player and current_difficulty %} &middot; {% endif %}
-                {% if current_player %}"{{ current_player }}"{% endif %}
+                Filtrando por: "{{ current_player }}"
                 <a href="{% url 'leaderboard' %}">Limpiar</a>
             </div>
             {% endif %}
@@ -72,14 +60,21 @@
 
         <div class="table-wrap">
             <table>
-                <thead><tr><th>#</th><th>Jugador</th><th>Puntaje</th><th>Fecha</th></tr></thead>
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Jugador</th>
+                        <th class="right">Puntaje</th>
+                        <th class="right">Fecha</th>
+                    </tr>
+                </thead>
                 <tbody>
                     {% for score in scores %}
                     <tr>
                         <td class="rank rank-{{ forloop.counter }}">{{ forloop.counter }}</td>
-                        <td class="player-name">{{ score.player_name }}</td>
-                        <td class="score-cell">{{ score.score }}</td>
-                        <td class="date-cell">{{ score.played_at|date:"d/m/Y" }}</td>
+                        <td class="player-name">{{ score.jugador }}</td>
+                        <td class="score-cell">{{ score.puntaje }} pts</td>
+                        <td class="date-cell">{{ score.fecha|date:"d/m/Y H:i" }}</td>
                     </tr>
                     {% empty %}
                     <tr><td colspan="4" class="empty">Todavía no hay puntajes registrados.</td></tr>
