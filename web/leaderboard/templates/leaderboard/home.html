@@ -24,6 +24,12 @@
         .feature p { font-size: 0.85rem; color: var(--text-muted); }
         .btn { display: inline-block; padding: 0.85rem 2.5rem; background: var(--accent); color: #fff; font-size: 1rem; font-weight: 500; border: none; border-radius: 4px; cursor: pointer; text-decoration: none; }
         .btn:hover { background: var(--accent-hover); }
+        .btn-row { display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap; margin: 1.5rem 0; }
+        .btn-outline { display: inline-block; padding: 0.85rem 2.5rem; background: transparent; color: var(--accent); font-size: 1rem; font-weight: 500; border: 2px solid var(--accent); border-radius: 4px; cursor: pointer; text-decoration: none; }
+        .btn-outline:hover { background: var(--accent); color: #fff; }
+        .play-section { background: var(--card-bg); border: 1px solid var(--border); border-radius: 4px; padding: 1.5rem; margin-bottom: 2rem; text-align: center; transition: background 0.3s, border-color 0.3s; }
+        .play-section h2 { font-size: 1.1rem; color: var(--text); margin-bottom: 0.5rem; }
+        .play-section p { font-size: 0.85rem; color: var(--text-muted); margin-bottom: 1rem; }
         .footer { margin-top: 2rem; font-size: 0.8rem; color: var(--text-faint); }
     </style>
 </head>
@@ -42,7 +48,15 @@
             <div class="feature"><h3>Efectos de Sonido</h3><p>Feedback sonoro con buzzer piezoeléctrico</p></div>
             <div class="feature"><h3>Leaderboard Cloud</h3><p>Puntajes persistidos en Supabase</p></div>
         </div>
-        <a href="{% url 'leaderboard' %}" class="btn">Ver Leaderboard</a>
+        <div class="play-section">
+            <h2>Jugar ahora</h2>
+            <p>Probá el simulador del ESP32 en Wokwi directamente desde tu navegador.</p>
+            <a href="https://wokwi.com/projects/468938398897624065" target="_blank" class="btn">Jugar en Wokwi</a>
+        </div>
+
+        <div class="btn-row">
+            <a href="{% url 'leaderboard' %}" class="btn-outline">Ver Leaderboard</a>
+        </div>
         <div class="footer">Thiago Cabral &amp; Franco Martinez — Integración Tecnológica</div>
     </div>
     <script>
